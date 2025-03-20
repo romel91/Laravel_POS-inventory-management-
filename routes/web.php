@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
-Route::post('/user-registration', ['UsrController::class', 'UserRegistraion']);
+Route::post('/user-registration', [UserController::class, 'UserRegistraion']);
 
