@@ -8,13 +8,14 @@ use Exception;
 
 class JWTToken
 {
-    function CreateToken($userEmail){
+    public static function CreateToken($userEmail,$id){
         $key =env('JWT_SECRET');
         $payload = [
             'iss' => "laravel-token",
             'iat' => time(),
             'exp' => time() + 60*60,
-            'userEmail' => $userEmail
+            'userEmail' => $userEmail,
+            'userId' => $id,
         ];
         $jwt = JWT::encode($payload, $key ,'HS256');
         return $jwt;
