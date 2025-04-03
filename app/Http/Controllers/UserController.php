@@ -58,4 +58,24 @@ return response()->json([
             ],200);
         }
 }//end method
+
+public function DashboardPage(Request $request){
+    $userEmail = $request->headers->get('userEmail');
+    $userId = $request->headers->get('userId');
+    return response()->json([
+        'status'=>'success',
+        'message'=>'Welcome to Dashboard',
+        'userEmail'=>$userEmail,
+        'userId'=>$userId
+    ],200);
+}
+//end method
+
+public function Logout(Request $request){
+    return response()->json([
+        'status'=>'success',
+        'message'=>'User Logout Successfully'
+    ],200)->cookie('token', '', -1);
+}
+//end method
 }

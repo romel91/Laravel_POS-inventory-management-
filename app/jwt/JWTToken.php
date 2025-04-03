@@ -16,12 +16,12 @@ class JWTToken
             'exp' => time() + 60*60,
             'userEmail' => $userEmail,
             'userId' => $id,
-        ];
+        ];  
         $jwt = JWT::encode($payload, $key ,'HS256');
         return $jwt;
     }
 
-    function VerifyToken($token):string{
+    public static function VerifyToken($token):string{
        try{
         $key =env('JWT_SECRET');
         $decode = JWT::decode($token, new key($key, 'HS256'));
