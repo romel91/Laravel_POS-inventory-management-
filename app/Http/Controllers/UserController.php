@@ -5,6 +5,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Exception;
 use App\jwt\JWTToken;
+use App\Mail\OtpMail;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -78,4 +80,66 @@ public function Logout(Request $request){
     ],200)->cookie('token', '', -1);
 }
 //end method
+
+public function SendOtp(Request $request){
+    $email = $request->input('email');
+
+    $otp = rand(100000, 999999);
+    // Store the OTP in the database or send it via email/SMS
+    // For demonstration purposes, we'll just return it in the response
+    $count = User::where('email', $email)->count();
+    if($count == 1){
+        Mail::to($email)->send(new OtpMail($otp));
+        User::where('email', $email)->update(['otp' => $otp]);
+        return response()->json([
+            'status'=>'success',
+            'message'=>'OTP sent successfully'
+        ],200);
+    }else{
+        return response()->json([
+            'status'=>'failed',
+            'message'=>'unauthorized'
+        ],200);
+    }
+
+    
+}//end method
+
+public function VerifyOtp(Request $request){
+    $email = $request->input('email');
+    $otp = $request->input('otp');
+
+    $count = User::where('email', $email)->where('otp', $otp)->count();
+    if($count == 1){
+        User::where('email',$email)->update(['otp' => 0]);
+        $token =JWTToken::CreateTokenForSetPassword($request->input('email'));
+        return response()->json([
+            'status'=>'success',
+            'message'=>'OTP verified successfully'
+        ],200)->cookie('token', $token, 60*24*30);
+    }else{
+        return response()->json([
+            'status'=>'failed',
+            'message'=>'unauthorized'
+        ],200);
+    }
+}//end method
+
+public function ResetPassword(Request $request){
+    try{
+        
+        $email = $request->header('email');
+        $password = $request->input('password');
+        User::where('email', $email)->update(['password' => $request->input('password')]);
+        return response()->json([
+            'status'=>'success',
+            'message'=>'Password Reset Successfully'
+        ],200);
+    }catch(Exception $e){
+        return response()->json([
+            'status'=>'failed',
+            'message'=>'Password Reset Failed'
+        ],200);
+    }
+}
 }
