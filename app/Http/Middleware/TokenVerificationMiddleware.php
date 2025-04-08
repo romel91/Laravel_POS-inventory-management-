@@ -24,8 +24,8 @@ class TokenVerificationMiddleware
                 'message'=>'Unauthorized'
             ],200);
         }else{
-            $request->headers->set('userEmail', $result);
-            $request->headers->set('userId', $result);
+            $request->headers->set('email', $result['userEmail']);
+            $request->headers->set('id', $result['userId']);
             return $next($request);
         }
 

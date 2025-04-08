@@ -21,11 +21,14 @@ class JWTToken
         return $jwt;
     }
 
-    public static function VerifyToken($token):string{
+    public static function VerifyToken($token):array|string{
        try{
         $key =env('JWT_SECRET');
         $decode = JWT::decode($token, new key($key, 'HS256'));
-        return $decode->userEmail;
+        return [
+            'userEmail' => $decode->userEmail,
+            'userId' => $decode->userId,
+        ];
        }
        catch(Exception $e){
             return 'Unauthorized';
