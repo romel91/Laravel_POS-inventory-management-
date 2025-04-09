@@ -1,0 +1,10 @@
+<template>
+    <NavLayout>
+        <ResetPasswordForm />
+    </NavLayout>
+</template>
+
+<script setup>
+    import NavLayout from '@/Layouts/NavLayout.vue';
+    import ResetPasswordForm from '@/Components/User/ResetPasswordForm.vue';
+</script>

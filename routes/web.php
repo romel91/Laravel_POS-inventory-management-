@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Middleware\SessionAuthenticate;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
@@ -18,13 +19,12 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 // });
 
 Route::get('/', [HomeController::class, 'index'])->name('homepage');
-Route::get('/test', [HomeController::class, 'test'])->name('testpage');
 Route::post('/user-registration', [UserController::class, 'UserRegistration'])->name('user.registration');
 Route::post('/user-login', [UserController::class, 'UserLogin'])->name('user.login');
 Route::post('/send-otp', [UserController::class, 'SendOtp'])->name('send.otp');
 Route::post('/verify-otp', [UserController::class, 'VerifyOtp'])->name('verify.otp');
 
-Route::middleware([TokenVerificationMiddleware::class])->group(function () {
+Route::middleware([SessionAuthenticate::class])->group(function () {
 //reset password
     Route::post('/reset-password', [UserController::class, 'ResetPassword'])->name('reset.password');
 
@@ -60,5 +60,14 @@ Route::middleware([TokenVerificationMiddleware::class])->group(function () {
 
     //dashboard-summary
     Route::get('/dashboard-summary', [DashboardController::class, 'DashboardSummary'])->name('dashboard.summary');
+
+    //reset password page
+    Route::get('reset-password', [UserController::class, 'ResetPasswordPage'])->name('reset.password.page');
 });
+
+//pages all routes
+Route::get('/login',[UserController::class, 'LoginPage'])->name('login.page');
+Route::get('/register',[UserController::class, 'RegisterPage'])->name('register.page');
+Route::get('/send-otp',[UserController::class, 'SendOtpPage'])->name('send.otp.page');
+Route::get('/verify-otp',[UserController::class, 'VerifyOtpPage'])->name('verify.otp.page');
 
