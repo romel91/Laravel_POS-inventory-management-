@@ -15,9 +15,9 @@
                             <hr/>
                             <div class="float-end mt-3">
                             <span>
-                                <a class="text-center ms-3 h6" href="registrationForm.html">Sign Up </a>
+                                <Link class="text-center ms-3 h6" href="registrationForm.html">Sign Up </Link>
                                 <span class="ms-1">|</span>
-                                <a class="text-center ms-3 h6" href="sendOTPForm.html">Forget Password</a>
+                                <Link class="text-center ms-3 h6" href="sendOTPForm.html">Forget Password</Link>
                             </span>
                             </div>
                         </div>
@@ -44,7 +44,7 @@
         }else if(form.password.length === 0){
             toaster.warning('Password is required');
         }else{
-            form.post('/login', {
+            form.post('/user-login', {
                 onSuccess: () => {
                     if(page.props.flash.status === true){
                         router.get('/DashboardPage');

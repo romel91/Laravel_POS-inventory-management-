@@ -16,13 +16,13 @@ class UserController extends Controller
         return Inertia::render('LoginPage');
     }
     public function RegisterPage(Request $request){
-        return Inertia::render('RegisterPage');
+        return Inertia::render('RegistrationPage');
     }
     public function SendOtpPage(Request $request){
-        return Inertia::render('SendOtpPage');
+        return Inertia::render('SendOTPPage');
     }
     public function VerifyOtpPage(Request $request){
-        return Inertia::render('VerifyOtpPage');
+        return Inertia::render('VerifyotpPage');
     }
     public function ResetPasswordPage(Request $request){
         return Inertia::render('ResetPasswordPage');
@@ -175,4 +175,23 @@ public function ResetPassword(Request $request){
         ],200);
     }
 }
+//end method
+
+public function ProfilePage(Request $request){
+    $email = request()->header('email');
+    $user = User::where('email', $email)->first();
+    return Inertia::render('ProfilePage',['user'=>$user]);
+}//end method
+
+public function UserUpdate(Request $request){
+    $email = request()->header('email');
+    User::where('email', $email)->update([
+        'name' => $request->input('name'),
+        'email'=> $request->input('email'),
+        'mobile'=> $request->input('mobile'),
+    ]);
+    $data = ['message'=> 'Profile update successfully','status'=>true, 'error'=>'' ];
+    return redirect()->back()->with($data);
 }
+}
+

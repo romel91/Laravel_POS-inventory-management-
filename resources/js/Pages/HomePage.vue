@@ -1,8 +1,3 @@
-<script setup>
-    import { Link } from "@inertiajs/vue3";
-    import NavLayout from "../Layout/NavLayout.vue";
-</script>
-
 <template>
     <div>
        <NavLayout>
@@ -22,6 +17,7 @@
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<script setup>
+    import { Link } from "@inertiajs/vue3";
+    import NavLayout from "../Layouts/NavLayout.vue";
+</script>

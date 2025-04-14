@@ -62,7 +62,12 @@ Route::middleware([SessionAuthenticate::class])->group(function () {
     Route::get('/dashboard-summary', [DashboardController::class, 'DashboardSummary'])->name('dashboard.summary');
 
     //reset password page
-    Route::get('reset-password', [UserController::class, 'ResetPasswordPage'])->name('reset.password.page');
+    Route::get('/reset-password', [UserController::class, 'ResetPasswordPage'])->name('reset.password.page');
+
+    //profile page
+    Route::get('/ProfilePage', [UserController::class, 'ProfilePage']);
+    //update profile
+    Route::post('/user-update', [UserController::class, 'UserUpdate']);
 });
 
 //pages all routes
