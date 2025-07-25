@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Container\Attributes\Log;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,6 +18,8 @@ class SessionAuthenticate
     {
         $email = $request->session()->get('email', 'default');
         $user_id = $request->session()->get('user_id', 'default');
+       
+
         if($email == 'default'){
             return redirect('/login');
         }else{

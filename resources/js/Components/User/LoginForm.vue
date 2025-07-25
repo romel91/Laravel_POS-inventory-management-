@@ -3,7 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-md-7 animated fadeIn col-lg-6 center-screen">
                 <div class="card w-90  p-4">
-                    <form @submit.prevent="login">
+                    <form @submit.prevent="submit">
                         <div class="card-body">
                             <h4>SIGN IN</h4>
                             <br/>
@@ -17,7 +17,7 @@
                             <span>
                                 <Link class="text-center ms-3 h6" href="registrationForm.html">Sign Up </Link>
                                 <span class="ms-1">|</span>
-                                <Link class="text-center ms-3 h6" href="sendOTPForm.html">Forget Password</Link>
+                                <Link class="text-center ms-3 h6" href="SendOTPForm.vue">Forget Password</Link>
                             </span>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                         toaster.error(page.props.flash.message);
                     }
                 }
-            
+
             });
         }
     }
