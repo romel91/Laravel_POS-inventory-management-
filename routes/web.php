@@ -1,62 +1,77 @@
 <?php
-
-use App\Http\Controllers\HomeController;
-use App\Http\Middleware\SessionAuthenticate;
+use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Middleware\SessionAuthenticate;
 use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\TokenVerificationMiddleware;
-use App\Models\Category;
-use App\Models\Customer;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/', [HomeController::class, 'index'])->name('homepage');
+//User all routes
 Route::post('/user-registration', [UserController::class, 'UserRegistration'])->name('user.registration');
 Route::post('/user-login', [UserController::class, 'UserLogin'])->name('user.login');
-Route::post('/send-otp', [UserController::class, 'SendOtp'])->name('send.otp');
-Route::post('/verify-otp', [UserController::class, 'VerifyOtp'])->name('verify.otp');
+Route::post('/send-otp', [UserController::class, 'SendOTPCode'])->name('SendOTPCode');
+Route::post('/verify-otp', [UserController::class, 'VerifyOTP'])->name('VerifyOTP');
+//pages all routes
+Route::get('/login',[UserController::class, 'LoginPage'])->name('login.page');
+Route::get('/registration',[UserController::class, 'RegistrationPage'])->name('registration.page');
+Route::get('/send-otp',[UserController::class, 'SendOTPPage'])->name('sendotp.page');
+Route::get('/verify-otp',[UserController::class, 'VerifyOTPPage'])->name('VerifyOTPPage');
 
 Route::middleware([SessionAuthenticate::class])->group(function () {
-//reset password
+    //reset password
     Route::post('/reset-password', [UserController::class, 'ResetPassword'])->name('reset.password');
 
-    Route::get('/dashboard', [UserController::class, 'DashboardPage'])->name('dashboard');
-    Route::get('/user-logout', [UserController::class, 'Logout'])->name('logout');
+    Route::get('/DashboardPage', [UserController::class, 'DashboardPage']);
+    Route::get('/user-logout', [UserController::class, 'UserLogout'])->name('logout');
 
     //category routes
-    Route::post('/create-category', [CategoryController::class, 'CreateCategory'])->name('create.category');
-    Route::get('/category-list', [CategoryController::class, 'CategoryList'])->name('category.list');
+    Route::post('/create-category', [CategoryController::class, 'CreateCategory'])->name('category.create');
+    Route::get('/list-category', [CategoryController::class, 'CategoryList'])->name('category.list');
     Route::post('/category-by-id', [CategoryController::class, 'CategoryById']);
-    Route::post('/update-category', [CategoryController::class, 'UpdateCategory']);
-    Route::post('/delete-category/{id}', [CategoryController::class, 'DeleteCategory']);
+    Route::post('/update-category', [CategoryController::class, 'CategoryUpdate'])->name('category.update');
+    Route::get('/delete-category/{id}', [CategoryController::class, 'CategoryDelete'])->name('category.delete');
+    Route::get('/CategoryPage', [CategoryController::class, 'CategoryPage'])->name('CategoryPage');
+    Route::get('/CategorySavePage', [CategoryController::class, 'CategorySavePage'])->name('CategorySavePage');
 
     //product routes
-    Route::post('/create-product', [ProductController::class, 'CreateProduct'])->name('create.product');
-    Route::get('/product-list', [ProductController::class, 'ProductList'])->name('product.list');
-    Route::post('/product-by-id', [ProductController::class, 'ProductById']);
-    Route::post('/update-product', [ProductController::class, 'UpdateProduct']);
-    Route::post('/delete-product/{id}', [ProductController::class, 'DeleteProduct']);
+    Route::post('/create-product', [ProductController::class, 'CreateProduct'])->name('CreateProduct');
+    Route::get('/list-product', [ProductController::class, 'ProductList'])->name('ProductList');
+    Route::post('/product-by-id', [ProductController::class, 'ProductById'])->name('ProductById');
+    Route::post('/update-product', [ProductController::class, 'ProductUpdate'])->name('ProductUpdate');
+    Route::get('/delete-product/{id}', [ProductController::class, 'ProductDelete'])->name('ProductDelete');
+    Route::get('/ProductPage', [ProductController::class, 'ProductPage'])->name('product.page');
+    Route::get('/ProductSavePage', [ProductController::class, 'ProductSavePage'])->name('ProductSavePage');
 
     //customer routes
-    Route::post('/create-customer', [CustomerController::class, 'CreateCustomer'])->name('create.customer');
-    Route::get('/customer-list', [CustomerController::class, 'CustomerList'])->name('customer.list');
-    Route::post('/customer-by-id', [CustomerController::class, 'CustomerById']);
-    Route::post('/update-customer', [CustomerController::class, 'UpdateCustomer']);
-    Route::post('/delete-customer/{id}', [CustomerController::class, 'DeleteCustomer']);
+    Route::post('/create-customer', [CustomerController::class, 'CreateCustomer'])->name('CreateCustomer');
+    Route::get('/list-customer', [CustomerController::class, 'CustomerList'])->name('CustomerList');
+    Route::post('/customer-by-id', [CustomerController::class, 'CustomerById'])->name('CustomerById');
+    Route::post('/update-customer', [CustomerController::class, 'CustomerUpdate'])->name('CustomerUpdate');
+    Route::get('/delete-customer/{id}', [CustomerController::class, 'CustomerDelete'])->name('CustomerDelete');
+    Route::get('/CustomerPage', [CustomerController::class, 'CustomerPage'])->name('CustomerPage');
+    Route::get('/CustomerSavePage', [CustomerController::class, 'CustomerSavePage'])->name('CustomerSavePage');
 
     //invoice routes
-    Route::post('/create-invoice', [InvoiceController::class, 'CreateInvoice'])->name('create.invoice');
-    Route::get('/invoice-list', [InvoiceController::class, 'InvoiceList'])->name('invoice.list');
-    Route::post('/invoice-details', [InvoiceController::class, 'InvoiceDetails'])->name('invoice.details');
-    Route::get('/invoice-delete/{id}', [InvoiceController::class, 'DeleteInvoice'])->name('invoice.delete');
+    Route::post('/invoice-create', [InvoiceController::class, 'InvoiceCreate'])->name('InvoiceCreate');
+    Route::get('/invoice-list', [InvoiceController::class, 'InvoiceList'])->name('InvoiceList');
+    Route::post('/invoice-details', [InvoiceController::class, 'InvoiceDetails'])->name('InvoiceDetails');
+    Route::get('/invoice-delete/{id}', [InvoiceController::class, 'InvoiceDelete'])->name('InvoiceDelete');
+    Route::get('/InvoiceListPage', [InvoiceController::class, 'InvoiceListPage'])->name('InvoiceListPage');
+
+
+     //sale route
+    Route::get('/create-sale', [SaleController::class, 'SalePage'])->name('SalePage');
 
     //dashboard-summary
     Route::get('/dashboard-summary', [DashboardController::class, 'DashboardSummary'])->name('dashboard.summary');
@@ -71,8 +86,7 @@ Route::middleware([SessionAuthenticate::class])->group(function () {
 });
 
 //pages all routes
-Route::get('/login',[UserController::class, 'LoginPage'])->name('login.page');
-Route::get('/register',[UserController::class, 'RegisterPage'])->name('register.page');
-Route::get('/send-otp',[UserController::class, 'SendOtpPage'])->name('send.otp.page');
-Route::get('/verify-otp',[UserController::class, 'VerifyOtpPage'])->name('verify.otp.page');
-
+Route::get('/login', [UserController::class, 'LoginPage'])->name('login.page');
+Route::get('/register', [UserController::class, 'RegisterPage'])->name('register.page');
+Route::get('/send-otp', [UserController::class, 'SendOtpPage'])->name('send.otp.page');
+Route::get('/verify-otp', [UserController::class, 'VerifyOtpPage'])->name('verify.otp.page');

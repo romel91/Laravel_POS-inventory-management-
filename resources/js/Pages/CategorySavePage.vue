@@ -1,9 +1,9 @@
 <template>
     <SideNavLayout>
-        <SummaryView/>
+        <CategorySaveForm/>
     </SideNavLayout>
 </template>
 <script setup>
     import SideNavLayout from '../Layouts/SideNavLayout.vue';
-    import SummaryView from '../Components/Dashboard/SummaryView.vue';
+    import CategorySaveForm from '../Components/Category/CategorySaveForm.vue';
 </script>

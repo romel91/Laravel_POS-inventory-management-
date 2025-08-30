@@ -188,5 +188,5 @@
 <script setup>
     import { usePage } from '@inertiajs/vue3'
     const page = usePage()
-    const cummary = page.props.list??[]
+    const cummary = page.props.list ?? []
 </script>

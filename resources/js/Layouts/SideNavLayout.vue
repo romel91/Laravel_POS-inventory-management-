@@ -1,7 +1,3 @@
-<script setup lang="ts">
-    import { Link } from '@inertiajs/vue3'
-</script>
-
 <template>
     <div>
         <nav id="topNav" class="navbar fixed-top bg-success top-navbar">
@@ -65,8 +61,8 @@
             </div>
         </div>
     </div>
+
 </template>
-
-<style scoped>
-
-</style>
+<script setup>
+import { Link } from '@inertiajs/vue3'
+</script>

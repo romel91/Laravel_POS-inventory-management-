@@ -17,15 +17,18 @@ class Product extends Model
         'unit',
         'image',
     ];
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function invoiceProducts(){
+    public function invoiceProducts()
+    {
         return $this->hasMany(InvoiceProduct::class);
     }
 }

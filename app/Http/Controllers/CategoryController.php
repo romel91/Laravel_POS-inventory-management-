@@ -2,75 +2,73 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    public function CategoryPage(Request $request){
+        $user_id = $request->header('id');
+        $categories = Category::where('user_id', $user_id)->get();
+        return Inertia::render('CategoryPage',['categories'=>$categories]);
+    }//end method
+
+    public function CategorySavePage(Request $request){
+        $category_id = $request->query('id');
+        $user_id = $request->header('id');
+        $category = Category::where('id', $category_id)->where('user_id', $user_id)->first();
+        return Inertia::render('CategorySavePage',['category'=>$category]);
+    }
     public function CreateCategory(Request $request){
-        $user_id =$request->header('id');
+        $user_id = $request->header('id');
 
         Category::create([
-            'name'=>$request->name,
-            'user_id'=>$user_id,
+            'name' => $request->name,
+            'user_id' => $user_id
         ]);
-        return response()->json([
-            'status'=>'success',
-            'message'=>'Category Created Successfully'
-        ],200);
-    } //end method
+        // return response()->json([
+        //     'status' => 'success',
+        //     'message' => 'Category created successfully'
+        // ]);
+        $data = ['message'=>'Category created successfully','status'=>true,'error'=>''];
+        return redirect('/CategoryPage')->with($data);
+    }//end method
 
     public function CategoryList(Request $request){
-        $user_id =$request->header('id');
-        $categories = Category::where('user_id',$user_id)->get();
-        return response()->json([
-            'status'=>'success',
-            'data'=>$categories
-        ],200);
-    } //end method
+        $user_id = $request->header('id');
+        $categories = Category::where('user_id', $user_id)->get();
+        return $categories;
+    }//end method
 
     public function CategoryById(Request $request){
-        $user_id =$request->header('id');
-        $category = Category::where('user_id',$user_id)->where('id',$request->id)->first();
-        return response()->json([
-            'status'=>'success',
-            'data'=>$category
-        ],200);
+        $user_id = $request->header('id');
+        $category =Category::where('id', $request->id)->where('user_id', $user_id)->first();
+        return $category;
     }//end method
 
-    public function UpdateCategory(Request $request){
-        $user_id =$request->header('id');
-        $category = Category::where('user_id',$user_id)->where('id',$request->id)->first();
-        if($category){
-            $category->update([
-                'name'=>$request->name,
-            ]);
-            return response()->json([
-                'status'=>'success',
-                'message'=>'Category Updated Successfully'
-            ],200);
-        }else{
-            return response()->json([
-                'status'=>'failed',
-                'message'=>'Category Not Found'
-            ],200);
-        }
+    public function CategoryUpdate(Request $request){
+        $user_id = $request->header('id');
+        $id = $request->input('id');
+        Category::where('id', $id)->where('user_id', $user_id)->update([
+            'name' => $request->input('name')
+        ]);
+        // return response()->json([
+        //     'status' => 'success',
+        //     'message' => 'Category Updaetd successfully'
+        // ]);
+        $data = ['message'=>'Category Updaetd successfully','status'=>true,'error'=>''];
+        return redirect('/CategoryPage')->with($data);
     }//end method
 
-    public function DeleteCategory(Request $request){
-        $user_id =$request->header('id');
-        $category = Category::where('user_id',$user_id)->where('id',$request->id)->first();
-        if($category){
-            $category->delete();
-            return response()->json([
-                'status'=>'success',
-                'message'=>'Category Deleted Successfully'
-            ],200);
-        }else{
-            return response()->json([
-                'status'=>'failed',
-                'message'=>'Category Not Found'
-            ],200);
-        }
+    public function CategoryDelete(Request $request,$id){
+        $user_id = $request->header('id');
+        Category::where('user_id', $user_id)->where('id', $id)->delete();
+        // return response()->json([
+        //     'status' => 'success',
+        //     'message' => 'Category Deleted successfully'
+        // ]);
+        $data = ['message'=>'Category Deleted successfully','status'=>true,'error'=>''];
+        return redirect('/CategoryPage')->with($data);
     }//end method
 }
